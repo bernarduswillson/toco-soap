@@ -172,12 +172,19 @@ CREATE TABLE `userGems` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `transaction`(
-    `tid` int(11) NOT NULL AUTO_INCREMENT,
+    `t_id` int(11) NOT NULL AUTO_INCREMENT,
     `user_id` int NOT NULL,
     `amount` int NOT NULL,
     `image` VARCHAR(255) NOT NULL,
     `status` enum('PENDING','ACCEPTED','REJECTED') NOT NULL DEFAULT 'PENDING',
     PRIMARY KEY (`tid`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `apikey` (
+    `a_id` int(11) NOT NULL AUTO_INCREMENT,
+    `desc` varchar(255) NOT NULL,
+    `key` varchar(255) NOT NULL,
+    PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
   
