@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.xml.internal.ws.developer.JAXWSProperties;
+import com.sun.xml.ws.developer.JAXWSProperties;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
