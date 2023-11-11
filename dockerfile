@@ -13,10 +13,8 @@ FROM amazoncorretto:8
 
 COPY --from=build /app/target /app
 
-COPY .env /app
-
 WORKDIR /app
 
 EXPOSE 8080
 
-CMD java -jar toco_Soap-1.0-SNAPSHOT.jar
+CMD ["java", "-jar", "toco_Soap-1.0-SNAPSHOT.jar"]
