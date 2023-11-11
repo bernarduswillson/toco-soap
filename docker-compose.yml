@@ -11,10 +11,10 @@ services:
       MYSQL_USER: toco
       MYSQL_PASSWORD: toco
 
-  toco-soap:
-    build:
-      dockerfile: Dockerfile
-      context: .
-    ports:
-        - "8080:8080"
+#  toco-soap:
+#    build:
+#      dockerfile: Dockerfile
+#      context: .
+#    ports:
+#        - "8080:8080"
 
