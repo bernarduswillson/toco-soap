@@ -4,6 +4,7 @@ import org.toco.model.*;
 import org.toco.entity.*;
 
 
+
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.annotation.Resource;
@@ -22,29 +23,40 @@ public class userGems {
 
     @Resource
     WebServiceContext wsctx;
+
+
     @WebMethod
     public void addGems(Integer user_id, Integer gem) {
-        userGems_Entity userGems = new userGems_Entity(user_id, gem);
-        userGems_model userGemsModel = new userGems_model();
-//        check if the user already exists add the gem to his gems if user doesnt exist create new user
-        if(userGemsModel.checkUser(user_id)){
-            Integer currentGems = userGemsModel.getUserGems(user_id);
-            userGems.setGem(currentGems + gem);
-            userGemsModel.update(userGems);
-            addLoggging("User with id " + user_id + " added " + gem + " gems");
+        if (validateApiKey()){
+            userGems_Entity userGems = new userGems_Entity(user_id, gem);
+            userGems_model userGemsModel = new userGems_model();
+            if (userGemsModel.checkUser(user_id)) {
+                Integer currentGems = userGemsModel.getUserGems(user_id);
+                userGems.setGem(currentGems + gem);
+                userGemsModel.update(userGems);
+                addLoggging("User with id " + user_id + " added " + gem + " gems");
+            } else {
+                userGemsModel.insert(userGems);
+                addLoggging("User with id " + user_id + " added " + gem + " gems");
+            }
         }
-        else{
-            userGemsModel.insert(userGems);
-            addLoggging("User with id " + user_id + " added " + gem + " gems");
+        else {
+            addLoggging("User with id " + user_id + " tried to add " + gem + " gems but failed because of invalid api key");
         }
     }
 
     @WebMethod
     public Integer getGems(Integer user_id) {
-        userGems_model userGemsModel = new userGems_model();
-        Integer gems = userGemsModel.getUserGems(user_id);
-        addLoggging("User with id " + user_id + " requested his gems");
-        return gems;
+        if(validateApiKey()){
+            userGems_model userGemsModel = new userGems_model();
+            Integer gems = userGemsModel.getUserGems(user_id);
+            addLoggging("User with id " + user_id + " requested his gems");
+            return gems;
+        }
+        else {
+            addLoggging("User with id " + user_id + " tried to get his gems but failed because of invalid api key");
+            return -1;
+        }
     }
 
     public void  addLoggging(String description) {
@@ -56,6 +68,20 @@ public class userGems {
         String endpoint = req.getRequestURI().toString();
         logging logging_service = new logging();
         logging_service.addLogging(description, ip, endpoint);
+    }
+
+    public Boolean validateApiKey() {
+        String[] API_KEYS = { "toco_rest", "Postman", "toco_php"};
+        MessageContext mc = wsctx.getMessageContext();
+        HttpExchange exchange = (HttpExchange) mc.get("com.sun.xml.ws.http.exchange");
+        String apiKey = exchange.getRequestHeaders().getFirst("X-API-KEY");
+        if (apiKey == null) {
+            return false;
+        } else if (apiKey.equals(API_KEYS[0]) || apiKey.equals(API_KEYS[1]) || apiKey.equals(API_KEYS[2])) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 

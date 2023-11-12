@@ -22,29 +22,37 @@ public class transaction {
 
     @WebMethod
     public void createTransaction(Integer user_id, Integer amount, String image) {
-//        if the amount is higher than user gem then its rejected if the amount is lower then the status is accepted
-        userGems_model userGemsModel = new userGems_model();
-        Integer userGems = userGemsModel.getUserGems(user_id);
-        if(userGems >= amount){
-            userGemsModel.update(new userGems_Entity(user_id, userGems - amount));
-            transaction_model transactionModel = new transaction_model();
-            transactionModel.insert(new transaction_entity(user_id, amount, image, "accepted"));
-            addLoggging("User with id " + user_id + " created a transaction with amount " + amount + " and description ACCEPTED");
+        if (validateApiKey()){
+            userGems_model userGemsModel = new userGems_model();
+            Integer userGems = userGemsModel.getUserGems(user_id);
+            if (userGems >= amount) {
+                userGemsModel.update(new userGems_Entity(user_id, userGems - amount));
+                transaction_model transactionModel = new transaction_model();
+                transactionModel.insert(new transaction_entity(user_id, amount, image, "accepted"));
+                addLoggging("User with id " + user_id + " created a transaction with amount " + amount + " and description ACCEPTED");
+            } else {
+                transaction_model transactionModel = new transaction_model();
+                transactionModel.insert(new transaction_entity(user_id, amount, image, "rejected"));
+                addLoggging("User with id " + user_id + " created a transaction with amount " + amount + " and description REJECTED");
+            }
         }
-        else{
-            transaction_model transactionModel = new transaction_model();
-            transactionModel.insert(new transaction_entity(user_id, amount, image, "rejected"));
-            addLoggging("User with id " + user_id + " created a transaction with amount " + amount + " and description REJECTED");
+        else {
+            addLoggging("User with id " + user_id + " tried to create a transaction with amount " + amount + " but failed because of invalid api key");
         }
     }
 
-//    get all transactions a user does
     @WebMethod
     public transaction_entity[] getTransactions(Integer user_id) {
-        transaction_model transactionModel = new transaction_model();
-        transaction_entity[] transactions = transactionModel.getTransaction(user_id);
-        addLoggging("User with id " + user_id + " requested his transactions");
-        return transactions;
+        if(validateApiKey()){
+            transaction_model transactionModel = new transaction_model();
+            transaction_entity[] transactions = transactionModel.getTransaction(user_id);
+            addLoggging("User with id " + user_id + " requested his transactions");
+            return transactions;
+        }
+        else {
+            addLoggging("User with id " + user_id + " tried to get his transactions but failed because of invalid api key");
+            return null;
+        }
     }
 
 
@@ -59,6 +67,20 @@ public class transaction {
         String endpoint = req.getRequestURI().toString();
         logging logging_service = new logging();
         logging_service.addLogging(description, ip, endpoint);
+    }
+
+    public Boolean validateApiKey() {
+        String[] API_KEYS = { "toco_rest", "Postman", "toco_php"};
+        MessageContext mc = wsctx.getMessageContext();
+        HttpExchange exchange = (HttpExchange) mc.get("com.sun.xml.ws.http.exchange");
+        String apiKey = exchange.getRequestHeaders().getFirst("X-API-KEY");
+        if (apiKey == null) {
+            return false;
+        } else if (apiKey.equals(API_KEYS[0]) || apiKey.equals(API_KEYS[1]) || apiKey.equals(API_KEYS[2])) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
