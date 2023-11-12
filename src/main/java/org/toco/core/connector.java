@@ -6,7 +6,7 @@ public class connector {
     public static Connection connect() {
         String user = "toco";
         String password = "toco";
-        String url = "jdbc:mysql://localhost:3306/toco_soap";
+        String url = "jdbc:mysql://toco-soap-db:3306/toco_soap";
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");

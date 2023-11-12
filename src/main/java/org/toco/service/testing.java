@@ -9,8 +9,7 @@ import javax.jws.WebMethod;
 public class testing {
     @WebMethod
     public String hello(String name) {
-        connector conn = new connector();
-        conn.connect();
+        connector.connect();
         return "Hello " + name + "!";
     }
 

@@ -1,20 +1,14 @@
 FROM mysql/mysql-server:8.0.23
 COPY db/toco_soap.sql /docker-entrypoint-initdb.d/
 
-FROM maven:3.8.6-amazoncorretto-8 AS build
-
-COPY . /app
+FROM maven:3.8-openjdk-11-slim
 
 WORKDIR /app
 
-RUN --mount=type=cache,target=/root/.m2 mvn clean install
+COPY src ./src
+COPY pom.xml .
+COPY target ./target
 
-FROM amazoncorretto:8
+RUN mvn clean package
 
-COPY --from=build /app/target /app
-
-WORKDIR /app
-
-EXPOSE 8080
-
-CMD java -jar toco_Soap-1.0-SNAPSHOT.jar
+CMD ["mvn", "exec:java"]
