@@ -50,7 +50,7 @@ public class transaction {
             return transactions;
         }
         else {
-            addLoggging("User with id " + user_id + " tried to get his transactions but failed because of invalid api key");
+            addLoggging("invalid api key for user"+user_id);
             return null;
         }
     }
@@ -74,6 +74,7 @@ public class transaction {
         MessageContext mc = wsctx.getMessageContext();
         HttpExchange exchange = (HttpExchange) mc.get("com.sun.xml.ws.http.exchange");
         String apiKey = exchange.getRequestHeaders().getFirst("X-API-KEY");
+        apiKey = apiKey.hashCode() + "";
         if (apiKey == null) {
             return false;
         } else if (apiKey.equals(API_KEYS[0]) || apiKey.equals(API_KEYS[1]) || apiKey.equals(API_KEYS[2])) {

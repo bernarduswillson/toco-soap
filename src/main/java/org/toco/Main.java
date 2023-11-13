@@ -1,12 +1,11 @@
 package org.toco;
-import org.toco.publisher.gemsPublisher;
-import org.toco.publisher.transactionPublisher;
+
+import org.toco.publisher.service_publisher;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("server started");
-        gemsPublisher.publish();
-        transactionPublisher.publish();
+        service_publisher.publish();
         System.out.println("all services online");
     }
 }
