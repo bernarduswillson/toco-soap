@@ -7,6 +7,7 @@ WORKDIR /app
 
 COPY src ./src
 COPY pom.xml .
+COPY .env .
 COPY target ./target
 
 RUN mvn clean package
