@@ -21,13 +21,13 @@ public class transaction_model {
     }
 //    GET TRANSACTION a user does return in transaction_entity array
     public transaction_entity[] getTransaction(Integer user_id){
-        String sql = "select * from transaction where user_id = (?)";
+        String sql = "select * from transaction where user_id = (?) order by tid desc";
         try (Connection connection = connector.connect() ;
              PreparedStatement command = connection.prepareStatement(sql)) {
             command.setInt(1, user_id);
             command.execute();
             ResultSet rs = command.getResultSet();
-            transaction_entity[] transactions = new transaction_entity[100];
+            transaction_entity[] transactions = new transaction_entity[getTransactionCount(user_id)];
             int i = 0;
             while(rs.next()){
                 transactions[i] = new transaction_entity(rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5));

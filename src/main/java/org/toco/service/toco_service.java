@@ -32,7 +32,7 @@ public interface toco_service {
     );
 
     @WebMethod
-    public String getTransactions(
+    public String[] getTransactions(
             @WebParam(name = "user_id") Integer user_id
     );
 

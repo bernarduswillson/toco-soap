@@ -34,9 +34,13 @@ CREATE TABLE `transaction`(
 CREATE TABLE `api`(
     api_id int(11) NOT NULL AUTO_INCREMENT,
     api_key VARCHAR(255) NOT NULL,
-    service VARCHAR(255) NOT NULL,
     PRIMARY KEY (`api_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `api` (`api_key`) VALUES
+    ('Postman'),
+    ('toco_rest'),
+    ('toco_php');
 
 
   

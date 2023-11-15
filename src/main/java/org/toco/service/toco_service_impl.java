@@ -85,15 +85,15 @@ public class toco_service_impl implements toco_service {
     }
 
     @Override
-    public String getTransactions(Integer user_id) {
+    public String[] getTransactions(Integer user_id) {
         if(validateApiKey()){
             transaction_model transactionModel = new transaction_model();
             transaction_entity[] transactions = transactionModel.getTransaction(user_id);
 //            create transactions to a string with each transaction on a new line
-            String ret = "";
+            String[] ret = new String[transactionModel.getTransactionCount(user_id)];
             int len = transactionModel.getTransactionCount(user_id);
             for (int i = 0; i < len; i++) {
-                ret += transactions[i].toString() + "\n";
+                ret[i] =transactions[i].getAmount().toString()+", "+transactions[i].getImage()+", "+transactions[i].getStatus();
             }
             addLoggging("User with id " + user_id + " requested his transactions");
             return ret;
