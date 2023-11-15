@@ -28,7 +28,8 @@ public interface toco_service {
     public String createTransaction(
             @WebParam(name = "user_id") Integer user_id,
             @WebParam(name = "amount") Integer amount,
-            @WebParam(name = "type") String type //add gems / buy item
+            @WebParam(name = "type") String type, //add gems / buy item
+            @WebParam(name = "email") String email
     );
 
     @WebMethod

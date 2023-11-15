@@ -2,6 +2,7 @@ package org.toco.service;
 
 import org.toco.model.*;
 import org.toco.entity.*;
+import org.toco.service.mail;
 
 
 import javax.jws.WebService;
@@ -61,7 +62,7 @@ public class toco_service_impl implements toco_service {
     }
 
     @Override
-    public String createTransaction(Integer user_id, Integer amount, String type) {
+    public String createTransaction(Integer user_id, Integer amount, String type, String email) {
         if (validateApiKey()){
             userGems_model userGemsModel = new userGems_model();
             Integer userGems = userGemsModel.getUserGems(user_id);
@@ -70,6 +71,7 @@ public class toco_service_impl implements toco_service {
                 transaction_model transactionModel = new transaction_model();
                 transactionModel.insert(new transaction_entity(user_id, amount, type, "accepted"));
                 addLoggging("User with id " + user_id + " created a transaction with amount " + amount + " and status ACCEPTED");
+                mail.sendMail(email,"Your transaction with " + amount + " gems has been accepted and will be processed immediately.");
                 return "success";
             } else {
                 transaction_model transactionModel = new transaction_model();
@@ -105,13 +107,13 @@ public class toco_service_impl implements toco_service {
     }
 
     public Boolean validateApiKey() {
-        String[] API_KEYS = { "toco_rest", "Postman", "toco_php"};
+        api_model apiModel = new api_model();
         MessageContext mc = wsctx.getMessageContext();
         HttpExchange exchange = (HttpExchange) mc.get("com.sun.xml.ws.http.exchange");
         String apiKey = exchange.getRequestHeaders().getFirst("X-API-KEY");
         if (apiKey == null) {
             return false;
-        } else if (apiKey.equals(API_KEYS[0]) || apiKey.equals(API_KEYS[1]) || apiKey.equals(API_KEYS[2])) {
+        } else if (apiModel.checkApiKey(apiKey)) {
             return true;
         } else {
             return false;
