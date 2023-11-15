@@ -39,4 +39,19 @@ public class transaction_model {
         }
     }
 
+//    get transaction count by a user
+    public Integer getTransactionCount(Integer user_id){
+        String sql = "select count(*) from transaction where user_id = (?)";
+        try (Connection connection = connector.connect() ;
+             PreparedStatement command = connection.prepareStatement(sql)) {
+            command.setInt(1, user_id);
+            command.execute();
+            ResultSet rs = command.getResultSet();
+            rs.next();
+            return rs.getInt(1);
+        } catch (SQLException exception) {
+            throw new RuntimeException("Error when getting transaction", exception);
+        }
+    }
+
 }

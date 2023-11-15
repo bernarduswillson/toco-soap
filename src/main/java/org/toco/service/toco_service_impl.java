@@ -5,7 +5,6 @@ import org.toco.entity.*;
 
 
 import javax.jws.WebService;
-import javax.jws.WebMethod;
 import javax.annotation.Resource;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
@@ -70,12 +69,12 @@ public class toco_service_impl implements toco_service {
                 userGemsModel.update(new userGems_Entity(user_id, userGems - amount));
                 transaction_model transactionModel = new transaction_model();
                 transactionModel.insert(new transaction_entity(user_id, amount, type, "accepted"));
-                addLoggging("User with id " + user_id + " created a transaction with amount " + amount + " and description ACCEPTED");
+                addLoggging("User with id " + user_id + " created a transaction with amount " + amount + " and status ACCEPTED");
                 return "success";
             } else {
                 transaction_model transactionModel = new transaction_model();
                 transactionModel.insert(new transaction_entity(user_id, amount, type, "rejected"));
-                addLoggging("User with id " + user_id + " created a transaction with amount " + amount + " and description REJECTED");
+                addLoggging("User with id " + user_id + " created a transaction with amount " + amount + " and status REJECTED");
                 return "insufficient gems";
             }
         }
@@ -86,12 +85,18 @@ public class toco_service_impl implements toco_service {
     }
 
     @Override
-    public transaction_entity[] getTransactions(Integer user_id) {
+    public String getTransactions(Integer user_id) {
         if(validateApiKey()){
             transaction_model transactionModel = new transaction_model();
             transaction_entity[] transactions = transactionModel.getTransaction(user_id);
+//            create transactions to a string with each transaction on a new line
+            String ret = "";
+            int len = transactionModel.getTransactionCount(user_id);
+            for (int i = 0; i < len; i++) {
+                ret += transactions[i].toString() + "\n";
+            }
             addLoggging("User with id " + user_id + " requested his transactions");
-            return transactions;
+            return ret;
         }
         else {
             addLoggging("invalid api key for user"+user_id);
