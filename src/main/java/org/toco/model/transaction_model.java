@@ -7,9 +7,9 @@ import org.toco.entity.transaction_entity;
 public class transaction_model {
 //    insert a transaction
     public void insert (transaction_entity transaction_entity) {
-        String sql = "INSERT INTO transaction (user_id, amount, image, status) VALUES (?, ?, ?, ?)";
+        String sqltrans = "INSERT INTO transaction (user_id, amount, image, status) VALUES (?, ?, ?, ?)";
         try (Connection connection = connector.connect() ;
-             PreparedStatement command = connection.prepareStatement(sql)) {
+             PreparedStatement command = connection.prepareStatement(sqltrans)) {
             command.setInt(1, transaction_entity.getUser_id());
             command.setInt(2, transaction_entity.getAmount());
             command.setString(3, transaction_entity.getImage());

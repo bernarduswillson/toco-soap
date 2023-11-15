@@ -25,15 +25,19 @@ public class toco_service_impl implements toco_service {
         if (validateApiKey()){
             userGems_Entity userGems = new userGems_Entity(user_id, gem);
             userGems_model userGemsModel = new userGems_model();
+            transaction_model transactionModel = new transaction_model();
+            transaction_entity tan = new transaction_entity(user_id, gem, "add gems", "ACCEPTED");
             if (userGemsModel.checkUser(user_id)) {
                 Integer currentGems = userGemsModel.getUserGems(user_id);
                 userGems.setGem(currentGems + gem);
                 userGemsModel.update(userGems);
                 addLoggging("User with id " + user_id + " added " + gem + " gems");
+                transactionModel.insert(tan);
                 return "success";
             } else {
                 userGemsModel.insert(userGems);
                 addLoggging("User with id " + user_id + " added " + gem + " gems");
+                transactionModel.insert(tan);
                 return "success";
             }
         }
