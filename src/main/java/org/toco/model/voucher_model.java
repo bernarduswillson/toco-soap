@@ -7,7 +7,7 @@ import org.toco.entity.voucher_entity;
 
 public class voucher_model {
     public void insert (voucher_entity voucher_entity) {
-        String sql = "INSERT INTO voucher (code, user_id, amount) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO voucher_record (code, user_id, amount) VALUES (?, ?, ?)";
         try (Connection connection = connector.connect() ;
              PreparedStatement command = connection.prepareStatement(sql)) {
             command.setString(1, voucher_entity.getCode());
@@ -20,24 +20,24 @@ public class voucher_model {
     }
 
     public voucher_entity [] getAllVouchers () {
-        String sql = "SELECT * FROM voucher";
+        String sql = "SELECT * FROM voucher_record";
         try (Connection connection = connector.connect() ;
              PreparedStatement command = connection.prepareStatement(sql)) {
             ResultSet result = command.executeQuery();
             voucher_entity [] voucher_entity = new voucher_entity[getAllCount()];
             int i = 0;
             while (result.next()) {
-                voucher_entity[i] = new voucher_entity(result.getString("code"), result.getInt("user_id"), result.getInt("amount"));
+                voucher_entity[i] = new voucher_entity(result.getString("code"), result.getInt("user_id"), result.getInt("amount"), result.getString("timestamp"));
                 i++;
             }
             return voucher_entity;
         } catch (SQLException exception) {
-            throw new RuntimeException("Error when inserting", exception);
+            throw new RuntimeException("Error when getting", exception);
         }
     }
 
     public voucher_entity[] getSpecifiedVoucher(String code){
-        String sql = "SELECT * FROM voucher WHERE code = ?";
+        String sql = "SELECT * FROM voucher_record WHERE code = ?";
         try (Connection connection = connector.connect() ;
              PreparedStatement command = connection.prepareStatement(sql)) {
             command.setString(1, code);
@@ -45,17 +45,17 @@ public class voucher_model {
             voucher_entity [] voucher_entity = new voucher_entity[getSpecifiedCount(code)];
             int i = 0;
             while (result.next()) {
-                voucher_entity[i] = new voucher_entity(result.getString("code"), result.getInt("user_id"), result.getInt("amount"));
+                voucher_entity[i] = new voucher_entity(result.getString("code"), result.getInt("user_id"), result.getInt("amount"),result.getString("timestamp"));
                 i++;
             }
             return voucher_entity;
         } catch (SQLException exception) {
-            throw new RuntimeException("Error when inserting", exception);
+            throw new RuntimeException("Error when getting", exception);
         }
     }
 
     public Integer getSpecifiedCount(String code){
-        String sql = "SELECT COUNT(*) FROM voucher WHERE code = ?";
+        String sql = "SELECT COUNT(*) FROM voucher_record WHERE code = ?";
         try (Connection connection = connector.connect() ;
              PreparedStatement command = connection.prepareStatement(sql)) {
             command.setString(1, code);
@@ -67,12 +67,12 @@ public class voucher_model {
                 return 0;
             }
         } catch (SQLException exception) {
-            throw new RuntimeException("Error when inserting", exception);
+            throw new RuntimeException("Error when counting", exception);
         }
     }
 
     public Integer getAllCount(){
-        String sql = "SELECT COUNT(*) FROM voucher";
+        String sql = "SELECT COUNT(*) FROM voucher_record";
         try (Connection connection = connector.connect() ;
              PreparedStatement command = connection.prepareStatement(sql)) {
             ResultSet result = command.executeQuery();
@@ -83,7 +83,7 @@ public class voucher_model {
                 return 0;
             }
         } catch (SQLException exception) {
-            throw new RuntimeException("Error when inserting", exception);
+            throw new RuntimeException("Error when counting", exception);
         }
     }
 

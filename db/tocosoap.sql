@@ -43,7 +43,7 @@ INSERT INTO `api` (`api_key`) VALUES
     ('toco_rest'),
     ('toco_php');
 
-CREATE TABLE `voucher`(
+CREATE TABLE `voucher_record`(
     `vid` int(11) NOT NULL AUTO_INCREMENT,
     `code` varchar(255) NOT NULL,
     `user_id` int NOT NULL,

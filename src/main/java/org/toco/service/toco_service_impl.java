@@ -111,7 +111,7 @@ public class toco_service_impl implements toco_service {
             voucher_model voucherModel = new voucher_model();
             userGems_model userGemsModel = new userGems_model();
             transaction_model transactionModel = new transaction_model();
-            voucher_entity voucherEntity = new voucher_entity(voucher,user_id,amount);
+            voucher_entity voucherEntity = new voucher_entity(voucher,user_id,amount,"0");
             voucherModel.insert(voucherEntity);
             transactionModel.insert(new transaction_entity(user_id, amount, "voucher", "accepted", "0"));
             if (userGemsModel.checkUser(user_id)) {
@@ -137,7 +137,7 @@ public class toco_service_impl implements toco_service {
             Integer len = voucherModel.getSpecifiedCount(code);
             String[] ret = new String[len];
             for (int i = 0; i < len; i++) {
-                ret[i] = voucherEntity[i].getCode()+", "+voucherEntity[i].getAmount().toString()+", "+voucherEntity[i].getUser_id().toString();
+                ret[i] = voucherEntity[i].getCode()+", "+voucherEntity[i].getAmount().toString()+", "+voucherEntity[i].getUser_id().toString()+", "+voucherEntity[i].getCreated_at();
             }
             return ret;
         }
@@ -155,7 +155,7 @@ public class toco_service_impl implements toco_service {
             Integer len = voucherModel.getAllCount();
             String[] ret = new String[len];
             for (int i = 0; i < len; i++) {
-                ret[i] = voucherEntity[i].getCode()+", "+voucherEntity[i].getAmount().toString()+", "+voucherEntity[i].getUser_id().toString();
+                ret[i] = voucherEntity[i].getCode()+", "+voucherEntity[i].getAmount().toString()+", "+voucherEntity[i].getUser_id().toString()+", "+voucherEntity[i].getCreated_at();
             }
             return ret;
         }
