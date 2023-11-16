@@ -105,6 +105,66 @@ public class toco_service_impl implements toco_service {
         }
     }
 
+    @Override
+    public String useVoucher(String voucher, Integer user_id, Integer amount) {
+        if(validateApiKey()){
+            voucher_model voucherModel = new voucher_model();
+            userGems_model userGemsModel = new userGems_model();
+            transaction_model transactionModel = new transaction_model();
+            voucher_entity voucherEntity = new voucher_entity(voucher,user_id,amount);
+            voucherModel.insert(voucherEntity);
+            transactionModel.insert(new transaction_entity(user_id, amount, "voucher", "accepted", "0"));
+            if (userGemsModel.checkUser(user_id)) {
+                Integer currentGems = userGemsModel.getUserGems(user_id);
+                userGemsModel.update(new userGems_Entity(user_id, currentGems + amount));
+            } else {
+                userGemsModel.insert(new userGems_Entity(user_id, amount));
+            }
+            addLoggging("User with id " + user_id + " used voucher " + voucher + "with amount " + amount);
+            return "success";
+        }
+        else {
+            addLoggging("User with id " + user_id + " tried to use a voucher with amount " + amount + " but failed because of invalid api key");
+            return "invalid apikey";
+        }
+    }
+
+    @Override
+    public String[] getSpecifiedVouchers (String code){
+        if(validateApiKey()){
+            voucher_model voucherModel = new voucher_model();
+            voucher_entity[] voucherEntity = voucherModel.getSpecifiedVoucher(code);
+            Integer len = voucherModel.getSpecifiedCount(code);
+            String[] ret = new String[len];
+            for (int i = 0; i < len; i++) {
+                ret[i] = voucherEntity[i].getCode()+", "+voucherEntity[i].getAmount().toString()+", "+voucherEntity[i].getUser_id().toString();
+            }
+            return ret;
+        }
+        else {
+            addLoggging("invalid api key");
+            return null;
+        }
+    }
+
+    @Override
+    public String[] getAllVouchers() {
+        if(validateApiKey()){
+            voucher_model voucherModel = new voucher_model();
+            voucher_entity[] voucherEntity = voucherModel.getAllVouchers();
+            Integer len = voucherModel.getAllCount();
+            String[] ret = new String[len];
+            for (int i = 0; i < len; i++) {
+                ret[i] = voucherEntity[i].getCode()+", "+voucherEntity[i].getAmount().toString()+", "+voucherEntity[i].getUser_id().toString();
+            }
+            return ret;
+        }
+        else {
+            addLoggging("invalid api key");
+            return null;
+        }
+    }
+
     public Boolean validateApiKey() {
         api_model apiModel = new api_model();
         MessageContext mc = wsctx.getMessageContext();

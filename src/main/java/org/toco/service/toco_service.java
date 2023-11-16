@@ -36,4 +36,24 @@ public interface toco_service {
             @WebParam(name = "user_id") Integer user_id
     );
 
+    @WebMethod
+    public String useVoucher(
+            @WebParam(name = "code") String code,
+            @WebParam(name = "user_id") Integer user_id,
+            @WebParam(name = "amount") Integer amount
+
+    );
+
+    @WebMethod
+    public String[] getSpecifiedVouchers(
+            @WebParam(name = "code") String code
+    );
+
+    @WebMethod
+    public String[] getAllVouchers(
+
+    );
+
+
+
 }

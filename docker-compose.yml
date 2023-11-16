@@ -7,16 +7,16 @@ services:
       - "./db:/docker-entrypoint-initdb.d"
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: toco_soap
+      MYSQL_DATABASE: tocosoap
       MYSQL_USER: toco
       MYSQL_PASSWORD: toco
 
-  toco-soap:
-    build:
-      dockerfile: Dockerfile
-      context: .
-    ports:
-        - "8080:8080"
-    depends_on:
-      - toco-soap-db
+#  toco-soap:
+#    build:
+#      dockerfile: Dockerfile
+#      context: .
+#    ports:
+#        - "8080:8080"
+#    depends_on:
+#      - toco-soap-db
 

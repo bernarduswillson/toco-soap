@@ -43,6 +43,15 @@ INSERT INTO `api` (`api_key`) VALUES
     ('toco_rest'),
     ('toco_php');
 
+CREATE TABLE `voucher`(
+    `vid` int(11) NOT NULL AUTO_INCREMENT,
+    `code` varchar(255) NOT NULL,
+    `user_id` int NOT NULL,
+    `amount` int NOT NULL,
+    `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+    PRIMARY KEY (`vid`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
   
 
