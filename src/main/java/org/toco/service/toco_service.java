@@ -1,7 +1,5 @@
 package org.toco.service;
 
-import org.toco.entity.*;
-
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -16,7 +14,8 @@ public interface toco_service {
     @WebMethod
     public String addGems(
             @WebParam(name = "user_id") Integer user_id,
-            @WebParam(name = "gem") Integer gem
+            @WebParam(name = "gem") Integer gem,
+            @WebParam(name = "type") String type
     );
 
     @WebMethod

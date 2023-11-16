@@ -28,6 +28,7 @@ CREATE TABLE `transaction`(
     `amount` int NOT NULL,
     `image` VARCHAR(255) NOT NULL,
     `status` enum('PENDING','ACCEPTED','REJECTED') NOT NULL DEFAULT 'PENDING',
+    `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
     PRIMARY KEY (`tid`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

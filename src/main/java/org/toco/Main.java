@@ -1,7 +1,6 @@
 package org.toco;
 
 import org.toco.publisher.service_publisher;
-import org.toco.service.mail;
 
 
 public class Main {

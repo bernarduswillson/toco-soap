@@ -2,7 +2,6 @@ package org.toco.service;
 
 import org.toco.model.*;
 import org.toco.entity.*;
-import org.toco.service.mail;
 
 
 import javax.jws.WebService;
@@ -21,12 +20,12 @@ public class toco_service_impl implements toco_service {
     WebServiceContext wsctx;
 
     @Override
-    public String addGems(Integer user_id, Integer gem) {
+    public String addGems(Integer user_id, Integer gem, String type) {
         if (validateApiKey()){
             userGems_Entity userGems = new userGems_Entity(user_id, gem);
             userGems_model userGemsModel = new userGems_model();
             transaction_model transactionModel = new transaction_model();
-            transaction_entity tan = new transaction_entity(user_id, gem, "add gems", "ACCEPTED");
+            transaction_entity tan = new transaction_entity(user_id, gem, type, "ACCEPTED", "0");
             if (userGemsModel.checkUser(user_id)) {
                 Integer currentGems = userGemsModel.getUserGems(user_id);
                 userGems.setGem(currentGems + gem);
@@ -69,13 +68,13 @@ public class toco_service_impl implements toco_service {
             if (userGems >= amount) {
                 userGemsModel.update(new userGems_Entity(user_id, userGems - amount));
                 transaction_model transactionModel = new transaction_model();
-                transactionModel.insert(new transaction_entity(user_id, amount, type, "accepted"));
+                transactionModel.insert(new transaction_entity(user_id, amount, type, "accepted", "0"));
                 addLoggging("User with id " + user_id + " created a transaction with amount " + amount + " and status ACCEPTED");
                 mail.sendMail(email,"Your transaction with " + amount + " gems has been accepted and will be processed immediately.");
                 return "success";
             } else {
                 transaction_model transactionModel = new transaction_model();
-                transactionModel.insert(new transaction_entity(user_id, amount, type, "rejected"));
+                transactionModel.insert(new transaction_entity(user_id, amount, type, "rejected", "0"));
                 addLoggging("User with id " + user_id + " created a transaction with amount " + amount + " and status REJECTED");
                 return "insufficient gems";
             }
@@ -95,7 +94,7 @@ public class toco_service_impl implements toco_service {
             String[] ret = new String[transactionModel.getTransactionCount(user_id)];
             int len = transactionModel.getTransactionCount(user_id);
             for (int i = 0; i < len; i++) {
-                ret[i] =transactions[i].getAmount().toString()+", "+transactions[i].getImage()+", "+transactions[i].getStatus();
+                ret[i] =transactions[i].getAmount().toString()+", "+transactions[i].getImage()+", "+transactions[i].getStatus()+", "+transactions[i].getCreated_at();
             }
             addLoggging("User with id " + user_id + " requested his transactions");
             return ret;

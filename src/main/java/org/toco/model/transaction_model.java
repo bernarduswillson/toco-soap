@@ -30,7 +30,7 @@ public class transaction_model {
             transaction_entity[] transactions = new transaction_entity[getTransactionCount(user_id)];
             int i = 0;
             while(rs.next()){
-                transactions[i] = new transaction_entity(rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5));
+                transactions[i] = new transaction_entity(rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5), rs.getString(6));
                 i++;
             }
             return transactions;
