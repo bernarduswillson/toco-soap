@@ -1,4 +1,5 @@
 package org.toco.entity;
+
 import lombok.Data;
 
 @Data
@@ -13,5 +14,3 @@ public class logging_entity {
         this.endpoint = endpoint;
     }
 }
-
-

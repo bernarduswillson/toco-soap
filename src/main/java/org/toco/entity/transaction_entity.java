@@ -1,4 +1,5 @@
 package org.toco.entity;
+
 import lombok.Data;
 
 @Data

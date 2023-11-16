@@ -9,7 +9,6 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-
 public class mail {
     public static void sendMail(String email, String body) {
         // Sender's email address and password
@@ -53,15 +52,16 @@ public class mail {
             // Now set the actual message
             message.setContent(
                     "<h1>Thank You for Your Purchase!</h1>\n" +
-                            "    <p>We appreciate your recent purchase of our merchandise. Your support means the world to us!</p>\n" +
+                            "    <p>We appreciate your recent purchase of our merchandise. Your support means the world to us!</p>\n"
+                            +
                             "    <p>" + body + "</p>\n" +
-                            "    <p>If you have any questions or concerns regarding your order, feel free to reply to this email and we'll be in contact ASAP.</p>\n" +
+                            "    <p>If you have any questions or concerns regarding your order, feel free to reply to this email and we'll be in contact ASAP.</p>\n"
+                            +
                             "    <p>Thank you again for choosing toco to be your partner in studying language!</p>\n" +
                             "    <p>Best regards,</p>\n" +
                             "    <p>Toco Team</p>\n" +
-                            "    <a href=\"http://localhost:8008\" class=\"button\">Visit Our Website</a>"
-                    , "text/html"
-            );
+                            "    <a href=\"http://localhost:8008\" class=\"button\">Visit Our Website</a>",
+                    "text/html");
 
             // Send the message
             Transport.send(message);
