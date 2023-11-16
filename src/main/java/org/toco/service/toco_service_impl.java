@@ -113,7 +113,7 @@ public class toco_service_impl implements toco_service {
             transaction_model transactionModel = new transaction_model();
             voucher_entity voucherEntity = new voucher_entity(voucher,user_id,amount,"0");
             voucherModel.insert(voucherEntity);
-            transactionModel.insert(new transaction_entity(user_id, amount, "voucher", "accepted", "0"));
+            transactionModel.insert(new transaction_entity(user_id, amount, "Voucher Redeemed", "accepted", "0"));
             if (userGemsModel.checkUser(user_id)) {
                 Integer currentGems = userGemsModel.getUserGems(user_id);
                 userGemsModel.update(new userGems_Entity(user_id, currentGems + amount));
