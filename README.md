@@ -62,8 +62,4 @@ for more information about the endpoints, you can check the wsdl file in /servic
     - 13521021
 8. mail support
     - 13521022 
-9. testing and fixing bugs
-   - 13521019
-   - 13521021
-   - 13521022 
 
