@@ -41,3 +41,5 @@ all of the endpoints are in /service
 - getSpecifiedVouchers -> get the specified voucher usage
 - getAllVouchers -> get all voucher usage
 
+for more information about the endpoints, you can check the wsdl file in /service?wsdl
+
